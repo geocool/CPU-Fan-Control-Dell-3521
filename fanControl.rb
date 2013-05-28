@@ -62,6 +62,7 @@ $exit = false
 $constControl = false
 $safeSound = true
 $espeak = false
+$colorOut = false
 
 class FanControl
 
@@ -204,14 +205,62 @@ def speedControl
     end
   end
   
+  # Print Info
+  printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
+  
   end
+
+  # Const Mode Safe
+  if($safeSound &&  $constControl && 
+    cFanStatus !=HIGH_FAN &&  cTemp >= hig_temp)
+    
+    print "\a" # Beep Sound
+    $updateInterval = 1 # Small Update Interval Cause OF Safe Mode
+  end
+  
+end
+
+#Terminal Output , CurrentTemp,CurrentFanStatus
+def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   # Print To Terminal Info
     system("clear")
+  puts "\033[36m\033[1m" if $colorOut
   puts "  ..:: CPU Fan Control ::.."
   puts "A Ruby Script By George Sofianos"
   puts "  For Dell Inspiron 3521 Only"
+  puts "\033[0m"  if $colorOut
   puts "" #NEWLINE
-  puts "--------- Information -----------"
+  
+  # Colored Information Output
+  if($colorOut)
+  puts "--------- \033[33m\033[1mInformation\033[0m -----------"
+  puts "---------------------------------"
+  puts "\033[1mCurrent Mode:\033[0m         Summer Mode" if $summerMode && !$constControl
+  puts "\033[1mCurrent Mode:\033[0m         Normal Mode" if !$summerMode && !$constControl
+  puts "\033[1mCurrent Mode:\033[0m         Const  Mode" if $constControl
+  puts "\033[1mSuper Freeze Mode:\033[0m    \033[31mON\033[0m " if $superFreezeMode
+  puts "\033[1mSuper Freeze Mode:\033[0m    OFF " if !$superFreezeMode
+  puts "\033[1mFan State:\033[0m            NULL" if cFanStatus == NO_FAN
+  puts "\033[1mFan State:\033[0m            \033[33mLOW\033[0m" if cFanStatus == LOW_FAN
+  puts "\033[1mFan State:\033[0m            \033[31mHIGH\033[0m" if cFanStatus == HIGH_FAN
+  puts "\033[1mCurrent Temperature:\033[0m  \033[31m" + cTemp.to_s  + " C\033[0m" if cTemp >= hig_temp
+  puts "\033[1mCurrent Temperature:\033[0m  " + cTemp.to_s  + " C" if cTemp < hig_temp
+  puts "\033[1mUpdate Interval:\033[0m      " + $updateInterval.to_s + " seconds"
+  puts "---------------------------------"
+  puts "---------------------------------"  
+  #Temperature Table
+  puts "" #NEWLINE
+  puts "------- \033[33m\033[1mTemperature Table\033[0m -------"
+  puts "---------------------------------"
+  puts "\033[1mNULL State :\033[0m **c - #{low_temp}c"
+  puts "\033[1mLOW  State :\033[0m #{low_temp}c - #{hig_temp}c"
+  puts "\033[1mHIGH State :\033[0m #{hig_temp}c - **c"
+  puts "\033[1mFreeze Off :\033[0m #{mid_temp}c"
+  puts "---------------------------------"
+  puts "---------------------------------"
+    #Non Color Information Output
+  else
+    puts "--------- Information -----------"
   puts "---------------------------------"
   puts "Current Mode:         Summer Mode" if $summerMode && !$constControl
   puts "Current Mode:         Normal Mode" if !$summerMode && !$constControl
@@ -225,9 +274,8 @@ def speedControl
   puts "Update Interval:      " + $updateInterval.to_s + " seconds"
   puts "---------------------------------"
   puts "---------------------------------"
-  
   #Temperature Table
-    puts "" #NEWLINE
+  puts "" #NEWLINE
   puts "------- Temperature Table -------"
   puts "---------------------------------"
   puts "NULL State : **c - #{low_temp}c"
@@ -236,16 +284,10 @@ def speedControl
   puts "Freeze Off : #{mid_temp}c"
   puts "---------------------------------"
   puts "---------------------------------"
-
-  
-  # Const Mode Safe
-  if($safeSound &&  $constControl && 
-    cFanStatus !=HIGH_FAN &&  cTemp >= hig_temp)
-    
-    print "\a" # Beep Sound
-    $updateInterval = 1 # Small Update Interval Cause OF Safe Mode
   end
-  
+
+
+    
 end
 
 # Here Script Starts
@@ -279,6 +321,10 @@ def main
       $espeak = true
     end
   
+    if(arg.include?("-owc")) # Summer Mode
+      $colorOut = true
+    end
+  
     # Show Available Switches
     if(arg.include?("-h"))
     system("clear")
@@ -294,6 +340,7 @@ def main
     puts " -ns :  No Safe Sound   - Close Safe High Temp Sound On Const Mode"
     puts " -sm :  Summer Mode On  - High Speen Fan In Higher Temperatures"
     puts " -es :  Espeak On       - Let epseak notify about changes"
+    puts " -owc:  Out With Color  - Add Colors To The Output"
     puts "----------------------------------"
     puts "" #NEWLINE
   
