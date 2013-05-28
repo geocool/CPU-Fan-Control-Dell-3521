@@ -57,7 +57,7 @@ SUM_HIGH_FAN_TEMP = 60
 #Global Variables
 $superFreezeMode = false
 $summerMode = false
-$updateInterval = 4
+$updateInterval = 1
 $exit = false
 $constControl = false
 $safeSound = true
