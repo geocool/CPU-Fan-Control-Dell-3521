@@ -42,6 +42,7 @@ getTemp: 	 Returns Temperature As Integer
 =end
 
 #Constants
+VERSION = "1.2beta"
 NO_FAN   = 0
 LOW_FAN  = 1
 HIGH_FAN = 2
@@ -334,6 +335,8 @@ def main
     puts "  For Dell Inspiron 3521 Only"
     puts "" #NEWLINE
     puts "------- Available Switches -------"
+    puts " -h  :  Shows This Help Screen"
+    puts " -v  :  Shows Script Version"
     puts " -ch :  Const High Mode - High Fan Speed"
     puts " -cl :  Const Low  Mode - Low  Fan Speed"
     puts " -co :  Const Off  Mode - Off  Fan"
@@ -345,6 +348,11 @@ def main
     puts "----------------------------------"
     puts "" #NEWLINE
   
+    $exit = true
+    end
+  
+    if(arg.include?("-v"))
+    puts VERSION
     $exit = true
     end
   }
