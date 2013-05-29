@@ -204,11 +204,12 @@ def speedControl
       $superFreezeMode = false
     end
   end
-  
-  # Print Info
-  printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
+
   
   end
+  
+    # Print Info
+  printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
 
   # Const Mode Safe
   if($safeSound &&  $constControl && 
