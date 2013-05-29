@@ -236,7 +236,6 @@ def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   # Colored Information Output
   if($colorOut)
   puts "--------- \033[33m\033[1mInformation\033[0m -----------"
-  puts "---------------------------------"
   puts "\033[1mCurrent Mode:\033[0m         Summer Mode" if $summerMode && !$constControl
   puts "\033[1mCurrent Mode:\033[0m         Normal Mode" if !$summerMode && !$constControl
   puts "\033[1mCurrent Mode:\033[0m         Const  Mode" if $constControl
@@ -248,22 +247,18 @@ def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   puts "\033[1mCurrent Temperature:\033[0m  \033[31m" + cTemp.to_s  + " C\033[0m" if cTemp >= hig_temp
   puts "\033[1mCurrent Temperature:\033[0m  " + cTemp.to_s  + " C" if cTemp < hig_temp
   puts "\033[1mUpdate Interval:\033[0m      " + $updateInterval.to_s + " seconds"
-  puts "---------------------------------"
-  puts "---------------------------------"  
+  puts "---------------------------------" 
   #Temperature Table
   puts "" #NEWLINE
   puts "------- \033[33m\033[1mTemperature Table\033[0m -------"
-  puts "---------------------------------"
   puts "\033[1mNULL State :\033[0m **c - #{low_temp}c"
   puts "\033[1mLOW  State :\033[0m #{low_temp}c - #{hig_temp}c"
   puts "\033[1mHIGH State :\033[0m #{hig_temp}c - **c"
   puts "\033[1mFreeze Off :\033[0m #{mid_temp}c"
   puts "---------------------------------"
-  puts "---------------------------------"
     #Non Color Information Output
   else
     puts "--------- Information -----------"
-  puts "---------------------------------"
   puts "Current Mode:         Summer Mode" if $summerMode && !$constControl
   puts "Current Mode:         Normal Mode" if !$summerMode && !$constControl
   puts "Current Mode:         Const  Mode" if $constControl
@@ -275,16 +270,13 @@ def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   puts "Current Temperature:  " + cTemp.to_s  + " C"
   puts "Update Interval:      " + $updateInterval.to_s + " seconds"
   puts "---------------------------------"
-  puts "---------------------------------"
   #Temperature Table
   puts "" #NEWLINE
   puts "------- Temperature Table -------"
-  puts "---------------------------------"
   puts "NULL State : **c - #{low_temp}c"
   puts "LOW  State : #{low_temp}c - #{hig_temp}c"
   puts "HIGH State : #{hig_temp}c - **c"
   puts "Freeze Off : #{mid_temp}c"
-  puts "---------------------------------"
   puts "---------------------------------"
   end
 
