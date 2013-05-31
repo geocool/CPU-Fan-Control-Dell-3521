@@ -93,16 +93,11 @@ class FanControl
       return
     end
     
+    # Set Fan Mode (0-Close,1-Low,2-High)
     case mode.to_i
-      when NO_FAN
-	IO.popen("i8kctl fan - 0")
-	#puts "Fan Set To Null At Temp: #{getTemp}"
-      when LOW_FAN
-	IO.popen("i8kctl fan - 1")
-	#puts "Fan Set To Low At Temp: #{getTemp}"
-      when HIGH_FAN
-	IO.popen("i8kctl fan - 2")
-	#puts "Fan Set To High At Temp: #{getTemp}"
+      when NO_FAN then IO.popen("i8kctl fan - 0")
+      when LOW_FAN then IO.popen("i8kctl fan - 1")
+      when HIGH_FAN then IO.popen("i8kctl fan - 2")
     end
   
   end
@@ -110,40 +105,33 @@ class FanControl
   # Returns Fan Status
   def getFanStatus
     
-    if !@isInit
-      return -1
-    end
+      return -1 if !@isInit
     
     res = IO.popen("i8kctl fan")
     fanArray = res.read.split(" ")
+    
     return fanArray[1].to_i
   end
   
   # Returns Fan Status As String
   def getFanStatusStr
     
-    if !@isInit
-      return ""
-    end
+      return ""if !@isInit
     
     case getFanStatus
-    when NO_FAN
-      return "NULL"
-    when LOW_FAN
-      return "LOW"
-    when HIGH_FAN
-      return "HIGH"
+    when NO_FAN then return "NULL"
+    when LOW_FAN then return "LOW"
+    when HIGH_FAN then return "HIGH"
     end
   end
 
   # Returns CPU Temperature
   def getTemp
     
-    if !@isInit
-      return -1
-    end
+      return -1 if !@isInit
     
     res = IO.popen("i8kctl temp")
+    
     return res.read.to_i
   end
   
@@ -288,6 +276,7 @@ end
 def main
   ARGF.argv.each{
     |arg|
+  
     if(arg.include?("-ch")) # high
       constSpeedControl(HIGH_FAN)
       $constControl = true
@@ -299,25 +288,11 @@ def main
       $constControl = true
     end
   
-    if(arg.include?("-no")) # No Output (exit After Action)
-      $exit = true
-    end
-  
-    if(arg.include?("-ns")) # No Safe Sound
-      $safeSound = false
-    end
-  
-    if(arg.include?("-sm")) # Summer Mode
-      $summerMode = true
-    end
-  
-    if(arg.include?("-es")) # Summer Mode
-      $espeak = true
-    end
-  
-    if(arg.include?("-owc")) # Summer Mode
-      $colorOut = true
-    end
+      $exit 	  = true  if(arg.include?("-no")) # No Output (exit After Action)
+      $safeSound  = false if(arg.include?("-ns")) # No Safe Sound
+      $summerMode = true  if(arg.include?("-sm")) # Summer Mode
+      $espeak 	  = true  if(arg.include?("-es")) # Summer Mode
+      $colorOut   = true  if(arg.include?("-owc")) # Summer Mode
   
     # Show Available Switches
     if(arg.include?("-h"))
@@ -353,13 +328,9 @@ def main
 
   loop{
   # Moderate Fan Speed , Prints Output
-  if(!$exit)
-    speedControl
-  end
+    speedControl if(!$exit)
   #Break Loop If FanControl Not Initialized Successfully
-  if($exit)
-    break
-  end
+    break if($exit)
 
   # Sleep Used For Lower CPU Usage
   sleep($updateInterval)
