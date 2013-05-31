@@ -1,25 +1,9 @@
 #!/usr/bin/ruby
 =begin
-
-..:: SummerMode ::..
-In Summer Temperature are higher than usual (Especialy In Greece where I live).
-For this reason fan High Mode Starts And Stops At Higher Temp Values
-*Set SummerMode True Or False At $summerMode Global
-
-..:: Super Freeze Mode ::..
-Supper Freeze Mode is a mode that will be on when temperature is high.
-Fan speed will be high until reaches the mid_temp or until reaches a lower temp
-than high && a certain time passes
 TODO Time Interval Until Freeze Mode Is Off
-----
 
--Fan Speeds-
-NO_FAN_TEMP is the max Temperature For NULL Fan(No fan)
-HIGH_FAN_TEMP is the min Temperature For High Fan Speed
-LOW_FAN_TEMP is a mid Temperature used for stopping High Temperature
----
 
-FanControl Documentation
+FanControl Class Documentation
 ---------------------------------------------------------------
 initialize: 	 Checks For i8k Module.
 isInit?: 	 Returns If Object Initialized Properly
@@ -29,16 +13,6 @@ getFanStatusStr: Returns Fan Status In String
 getTemp: 	 Returns Temperature As Integer
 ---------------------------------------------------------------
 
-
-
-"------- Available Switches -------"
-" -ch :  Const High Mode"
-" -cl :  Const Low  Mode"
-" -co :  Const Off  Mode"
-" -no :  No Output"
-" -ns :  No Safe Sound"
-" -sm :  Summer Mode On"
-"----------------------------------"
 =end
 
 #Constants
