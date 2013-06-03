@@ -86,6 +86,17 @@ class FanControl
     
     return fanArray[1].to_i
   end
+
+  def vgaOn?
+	out = IO.popen("sudo cat /sys/kernel/debug/vgaswitcheroo/switch | grep DIS")
+	outStr = out.read
+
+	if(outStr.include?("Pwr"))
+   		return true
+	else
+   		return false
+	end
+  end
   
   # Returns Fan Status As String
   def getFanStatusStr
@@ -172,7 +183,7 @@ def speedControl
   end
   
     # Print Info
-  printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
+  printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp,control)
 
   # Const Mode Safe
   if($safeSound &&  $constControl && 
@@ -185,7 +196,7 @@ def speedControl
 end
 
 #Terminal Output , CurrentTemp,CurrentFanStatus
-def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
+def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp,control)
   # Print To Terminal Info
     system("clear")
   puts "\033[36m\033[1m" if $colorOut
@@ -201,6 +212,8 @@ def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   puts "\033[1mCurrent Mode:\033[0m         Summer Mode" if $summerMode && !$constControl
   puts "\033[1mCurrent Mode:\033[0m         Normal Mode" if !$summerMode && !$constControl
   puts "\033[1mCurrent Mode:\033[0m         Const  Mode" if $constControl
+  puts "\033[1mGraphics Card:\033[0m 	      ON" if control.vgaOn?
+  puts "\033[1mGraphics Card:\033[0m 	      OFF" if !control.vgaOn?	
   puts "\033[1mSuper Freeze Mode:\033[0m    \033[31mON\033[0m " if $superFreezeMode
   puts "\033[1mSuper Freeze Mode:\033[0m    OFF " if !$superFreezeMode
   puts "\033[1mFan State:\033[0m            NULL" if cFanStatus == NO_FAN
@@ -224,6 +237,8 @@ def printInfo(cTemp,cFanStatus,low_temp,mid_temp,hig_temp)
   puts "Current Mode:         Summer Mode" if $summerMode && !$constControl
   puts "Current Mode:         Normal Mode" if !$summerMode && !$constControl
   puts "Current Mode:         Const  Mode" if $constControl
+  puts "Graphics Card: 	      ON" if control.vgaOn?
+  puts "Graphics Card: 	      OFF" if !control.vgaOn?	
   puts "Super Freeze Mode:    ON " if $superFreezeMode
   puts "Super Freeze Mode:    OFF " if !$superFreezeMode
   puts "Fan State:            NULL" if cFanStatus == NO_FAN
